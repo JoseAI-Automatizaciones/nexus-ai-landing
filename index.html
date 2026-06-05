@@ -743,8 +743,12 @@ async function sendMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: text,
-        timestamp: new Date().toISOString(),
-        source: 'landing-nexus-ai'
+        metadata: {
+          fecha: new Date().toLocaleDateString('es-ES'),
+          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+          origen: 'landing-nexus-ai',
+          url: window.location.href
+        }
       })
     });
 
