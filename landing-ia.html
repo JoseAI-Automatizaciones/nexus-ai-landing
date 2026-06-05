@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus AI — Inteligencia que trabaja por ti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f4f0;
+    --accent: #c8f264;
+    --accent-dim: #9bc840;
+    --muted: #6b6b6b;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --chat-bg: #111;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800; font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.875rem; font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--accent); color: var(--black);
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 100px; font-family: var(--font-body);
+    font-weight: 500; font-size: 0.875rem;
+    cursor: pointer; transition: opacity 0.2s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(200,242,100,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(200,242,100,0.08);
+    border: 1px solid rgba(200,242,100,0.2);
+    color: var(--accent); font-size: 0.8rem; font-weight: 500;
+    padding: 0.35rem 1rem; border-radius: 100px;
+    margin-bottom: 2rem; letter-spacing: 0.05em; text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--accent); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800; line-height: 1.0;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--muted); font-weight: 300;
+    max-width: 560px; margin: 1.5rem auto 0;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; margin-top: 2.5rem;
+    flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--accent); color: var(--black);
+    border: none; padding: 0.85rem 2rem;
+    border-radius: 100px; font-family: var(--font-body);
+    font-weight: 500; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    border: 1px solid var(--border); padding: 0.85rem 2rem;
+    border-radius: 100px; font-family: var(--font-body);
+    font-weight: 400; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 5rem;
+    border-top: 1px solid var(--border); padding-top: 2.5rem;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+    color: var(--white);
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION ── */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.02em; max-width: 600px;
+  }
+  .section-sub {
+    color: var(--muted); font-size: 1rem; font-weight: 300;
+    max-width: 480px; margin-top: 1rem; line-height: 1.7;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    margin-top: 4rem;
+    border: 1.5px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+  }
+  .service-card {
+    background: var(--surface);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent); transform: scaleX(0);
+    transform-origin: left; transition: transform 0.3s;
+  }
+  .service-card:hover { background: var(--surface2); }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon {
+    width: 44px; height: 44px;
+    background: rgba(200,242,100,0.08);
+    border: 1px solid rgba(200,242,100,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+  .service-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 600;
+    margin-bottom: 0.75rem; letter-spacing: -0.01em;
+  }
+  .service-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; font-weight: 300; }
+
+  /* ── HOW IT WORKS ── */
+  .how-bg { background: var(--surface); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem; margin-top: 3.5rem;
+  }
+  .step { position: relative; }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 3.5rem; font-weight: 800;
+    color: rgba(200,242,100,0.12); line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .step h4 {
+    font-family: var(--font-display);
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .step p { color: var(--muted); font-size: 0.875rem; font-weight: 300; }
+
+  /* ── CHAT SECTION ── */
+  .chat-section { background: var(--black); }
+  .chat-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    margin-top: 0;
+  }
+  .chat-copy { }
+  .chat-copy .section-title { max-width: 100%; }
+  .chat-copy .section-sub { max-width: 100%; }
+  .chat-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .chat-feature {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+  }
+  .chat-feature-dot {
+    width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;
+    background: rgba(200,242,100,0.1); border: 1px solid rgba(200,242,100,0.25);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .chat-feature-dot::after {
+    content: ''; width: 6px; height: 6px;
+    background: var(--accent); border-radius: 50%;
+  }
+  .chat-feature-text { font-size: 0.9rem; color: var(--muted); }
+  .chat-feature-text strong { color: var(--white); font-weight: 500; }
+
+  /* ── CHAT UI ── */
+  .chat-ui {
+    background: #0e0e0e;
+    border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  }
+  .chat-header {
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .chat-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #6fcf60);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0;
+  }
+  .chat-header-info h5 {
+    font-family: var(--font-display); font-size: 0.9rem; font-weight: 600;
+  }
+  .chat-header-info span {
+    font-size: 0.75rem; color: var(--accent);
+  }
+  .chat-messages {
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    min-height: 320px; max-height: 380px; overflow-y: auto;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    display: flex; flex-direction: column; max-width: 82%;
+  }
+  .msg.bot { align-self: flex-start; }
+  .msg.user { align-self: flex-end; }
+  .msg-bubble {
+    padding: 0.75rem 1rem;
+    border-radius: 16px; font-size: 0.875rem; line-height: 1.5;
+  }
+  .msg.bot .msg-bubble {
+    background: var(--surface2); color: var(--white);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user .msg-bubble {
+    background: var(--accent); color: var(--black); font-weight: 500;
+    border-bottom-right-radius: 4px;
+  }
+  .msg-time {
+    font-size: 0.7rem; color: var(--muted);
+    margin-top: 0.3rem; padding: 0 0.25rem;
+  }
+  .msg.user .msg-time { text-align: right; }
+
+  .typing-indicator {
+    display: flex; align-items: center; gap: 4px; padding: 0.75rem 1rem;
+    background: var(--surface2); border-radius: 16px; border-bottom-left-radius: 4px;
+    width: fit-content;
+  }
+  .typing-indicator span {
+    width: 6px; height: 6px; background: var(--muted);
+    border-radius: 50%; animation: typing 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .chat-input-area {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 0.75rem; align-items: flex-end;
+  }
+  .chat-input {
+    flex: 1; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.75rem 1rem; color: var(--white);
+    font-family: var(--font-body); font-size: 0.875rem;
+    resize: none; outline: none; min-height: 44px; max-height: 120px;
+    transition: border-color 0.2s;
+  }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-input:focus { border-color: rgba(200,242,100,0.3); }
+  .chat-send {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--accent); border: none; border-radius: 10px;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--black);
+  }
+  .chat-send:hover { opacity: 0.85; transform: scale(1.05); }
+  .chat-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .chat-send svg { width: 18px; height: 18px; }
+
+  /* Status messages */
+  .chat-status {
+    font-size: 0.75rem; text-align: center;
+    color: var(--muted); padding: 0.5rem;
+  }
+  .chat-status.success { color: var(--accent); }
+  .chat-status.error { color: #f08080; }
+
+  /* ── TESTIMONIALS ── */
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .test-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem;
+    transition: border-color 0.3s;
+  }
+  .test-card:hover { border-color: rgba(200,242,100,0.2); }
+  .test-quote { font-size: 0.9rem; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; }
+  .test-quote strong { color: var(--white); }
+  .test-author { display: flex; align-items: center; gap: 0.75rem; }
+  .test-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; color: var(--muted); font-weight: 500;
+  }
+  .test-name { font-size: 0.875rem; font-weight: 500; }
+  .test-role { font-size: 0.75rem; color: var(--muted); }
+
+  /* ── CTA BOTTOM ── */
+  .cta-section {
+    background: var(--surface);
+    text-align: center;
+    padding: 8rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,242,100,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { margin: 0 auto; text-align: center; }
+  .cta-section .section-sub { margin: 1rem auto 0; text-align: center; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer .nav-logo { font-size: 1rem; }
+  footer p { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    h1 { font-size: 2.5rem; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    .chat-wrapper { grid-template-columns: 1fr; gap: 3rem; }
+    section { padding: 4rem 1.25rem; }
+    footer { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">nexus<span>.</span>ai</a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#testimonios">Casos</a></li>
+    <li><a href="#contacto">Contactar</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Hablar con un experto</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Inteligencia Artificial & Automatización</div>
+  <h1>Tu negocio,<br><em>inteligente</em> desde el día uno</h1>
+  <p class="hero-sub">Implementamos sistemas de IA y automatizaciones que reducen costos, eliminan tareas repetitivas y escalan tu operación sin fricciones.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Empezar ahora →</button>
+    <button class="btn-ghost" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">Ver servicios</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">3<span>×</span></div>
+      <div class="stat-label">más productividad</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">-60<span>%</span></div>
+      <div class="stat-label">costos operativos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">48<span>h</span></div>
+      <div class="stat-label">primer resultado</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="container">
+    <div class="section-tag">Lo que hacemos</div>
+    <h2 class="section-title">Soluciones que transforman tu operación</h2>
+    <p class="section-sub">Desde agentes conversacionales hasta pipelines de datos automatizados. Cada solución es construida a la medida.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>Agentes de IA</h3>
+        <p>Asistentes inteligentes que atienden clientes, califican leads y responden 24/7 sin intervención humana.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <h3>Automatización de procesos</h3>
+        <p>Flujos de trabajo que se ejecutan solos: desde la facturación hasta el seguimiento post-venta.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Análisis predictivo</h3>
+        <p>Modelos que anticipan tendencias, detectan anomalías y te dan ventaja sobre la competencia.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔗</div>
+        <h3>Integración de sistemas</h3>
+        <p>Conectamos tus herramientas existentes — CRM, ERP, canales de venta — en un ecosistema unificado.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💬</div>
+        <h3>Chatbots de ventas</h3>
+        <p>Asistentes que califican, nutren y convierten prospectos directamente en tus canales de comunicación.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧩</div>
+        <h3>Consultoría en IA</h3>
+        <p>Diagnóstico de tu operación y hoja de ruta clara para implementar IA sin desperdiciar recursos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" class="how-bg">
+  <div class="container">
+    <div class="section-tag">Cómo trabajamos</div>
+    <h2 class="section-title">De la idea al resultado en días, no meses</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h4>Diagnóstico</h4>
+        <p>Analizamos tu operación actual para identificar los puntos de mayor impacto con IA.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h4>Diseño</h4>
+        <p>Construimos la arquitectura técnica y el plan de implementación a la medida de tu negocio.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h4>Implementación</h4>
+        <p>Desplegamos las soluciones con iteraciones rápidas y feedback constante de tu equipo.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h4>Optimización</h4>
+        <p>Monitoreamos el rendimiento y ajustamos los modelos para maximizar resultados continuamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT SECTION -->
+<section id="contacto" class="chat-section">
+  <div class="container">
+    <div class="chat-wrapper">
+      <div class="chat-copy">
+        <div class="section-tag">Habla con nosotros</div>
+        <h2 class="section-title">¿Listo para automatizar tu negocio?</h2>
+        <p class="section-sub">Escríbenos directamente. Un especialista revisará tu caso y te contactará en menos de 24 horas con una propuesta concreta.</p>
+        <div class="chat-features">
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <div class="chat-feature-text"><strong>Sin compromiso.</strong> La primera consulta es gratuita y sin presiones.</div>
+          </div>
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <div class="chat-feature-text"><strong>Respuesta en menos de 24h.</strong> Tu mensaje llega directo a nuestro equipo.</div>
+          </div>
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <div class="chat-feature-text"><strong>Propuesta a la medida.</strong> No somos una agencia de plantillas.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-ui" id="chat-container">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          <div class="chat-header-info">
+            <h5>Nexus AI</h5>
+            <span>● En línea ahora</span>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+          <div class="msg bot">
+            <div class="msg-bubble">¡Hola! 👋 Soy el asistente de Nexus AI. ¿En qué puedo ayudarte hoy? Cuéntame sobre tu negocio y lo que quieres automatizar.</div>
+            <div class="msg-time">Ahora</div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <textarea
+            class="chat-input"
+            id="chat-input"
+            placeholder="Ej: Me gustaría tener más información..."
+            rows="1"
+          ></textarea>
+          <button class="chat-send" id="chat-send" title="Enviar mensaje">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-status" id="chat-status"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="container">
+    <div class="section-tag">Lo que dicen nuestros clientes</div>
+    <h2 class="section-title">Resultados reales, empresas reales</h2>
+    <div class="test-grid">
+      <div class="test-card">
+        <p class="test-quote">"Implementaron un agente que atiende el <strong>80% de nuestras consultas de soporte</strong> sin intervención humana. El equipo ahora se enfoca en lo que realmente importa."</p>
+        <div class="test-author">
+          <div class="test-avatar">MA</div>
+          <div>
+            <div class="test-name">Marcela Arango</div>
+            <div class="test-role">Gerente de Operaciones — LogisTech</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <p class="test-quote">"En <strong>2 semanas ya teníamos el primer flujo corriendo</strong>. Redujimos el tiempo de facturación de 3 días a 4 horas. Impresionante."</p>
+        <div class="test-author">
+          <div class="test-avatar">RC</div>
+          <div>
+            <div class="test-name">Rodrigo Castillo</div>
+            <div class="test-role">CFO — Distribuidora Norte</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <p class="test-quote">"Nuestro pipeline de ventas mejoró radicalmente. El chatbot califica prospectos y <strong>agenda reuniones automáticamente</strong>. ROI positivo desde el primer mes."</p>
+        <div class="test-author">
+          <div class="test-avatar">SP</div>
+          <div>
+            <div class="test-name">Sofía Palomino</div>
+            <div class="test-role">Head of Sales — Finova</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BOTTOM -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-title">¿Tu competencia ya usa IA.<br>¿Y tú?</h2>
+    <p class="section-sub">Cada día sin automatizar es un día que la brecha crece. Hablemos hoy.</p>
+    <div class="hero-actions" style="margin-top: 2rem;">
+      <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Quiero una consulta gratuita →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="nav-logo">nexus<span>.</span>ai</a>
+  <p>© 2025 Nexus AI. Todos los derechos reservados.</p>
+  <p style="font-size: 0.8rem; color: #444;">Diseñado para escalar contigo.</p>
+</footer>
+
+<script>
+const WEBHOOK_URL = 'https://prueba-n8n.vr3wak.easypanel.host/webhook/botventas';
+
+const messagesEl = document.getElementById('chat-messages');
+const inputEl = document.getElementById('chat-input');
+const sendBtn = document.getElementById('chat-send');
+const statusEl = document.getElementById('chat-status');
+
+function getTime() {
+  return new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+}
+
+function addMessage(text, type, time) {
+  const msgDiv = document.createElement('div');
+  msgDiv.className = `msg ${type}`;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = text;
+
+  const timeEl = document.createElement('div');
+  timeEl.className = 'msg-time';
+  timeEl.textContent = time || getTime();
+
+  msgDiv.appendChild(bubble);
+  msgDiv.appendChild(timeEl);
+  messagesEl.appendChild(msgDiv);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return msgDiv;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-indicator';
+  const indicator = document.createElement('div');
+  indicator.className = 'typing-indicator';
+  indicator.innerHTML = '<span></span><span></span><span></span>';
+  div.appendChild(indicator);
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function setStatus(msg, type) {
+  statusEl.textContent = msg;
+  statusEl.className = `chat-status ${type || ''}`;
+  if (msg) {
+    setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'chat-status'; }, 4000);
+  }
+}
+
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  addMessage(text, 'user');
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+  sendBtn.disabled = true;
+  showTyping();
+  setStatus('');
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        timestamp: new Date().toISOString(),
+        source: 'landing-nexus-ai'
+      })
+    });
+
+    removeTyping();
+    addMessage('¡Gracias por tu mensaje! Lo hemos recibido y un especialista se pondrá en contacto contigo muy pronto. 🙌', 'bot');
+    setStatus('Mensaje enviado correctamente ✓', 'success');
+  } catch (err) {
+    removeTyping();
+    addMessage('Hubo un problema al enviar. Por favor intenta de nuevo en un momento.', 'bot');
+    setStatus('Error de conexión. Intenta de nuevo.', 'error');
+    console.error('Webhook error:', err);
+  }
+
+  sendBtn.disabled = false;
+  inputEl.focus();
+}
+
+sendBtn.addEventListener('click', sendMessage);
+
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+});
+
+inputEl.value = 'Me gustaría tener más información';
+inputEl.dispatchEvent(new Event('input'));
+</script>
+
+</body>
+</html>
