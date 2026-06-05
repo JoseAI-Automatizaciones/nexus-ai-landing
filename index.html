@@ -737,19 +737,21 @@ async function sendMessage() {
   setStatus('');
 
   try {
-    await fetch(WEBHOOK_URL, {
+    const now = new Date();
+    const payload = {
+      message: text,
+      metadata: {
+        fecha: now.toLocaleDateString('es-ES'),
+        hora: now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        origen: 'landing-nexus-ai',
+        url: window.location.href
+      }
+    };
+
+    const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: text,
-        metadata: {
-          fecha: new Date().toLocaleDateString('es-ES'),
-          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-          origen: 'landing-nexus-ai',
-          url: window.location.href
-        }
-      })
+      body: JSON.stringify(payload)
     });
 
     removeTyping();
