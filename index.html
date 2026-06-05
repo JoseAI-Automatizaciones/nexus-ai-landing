@@ -755,8 +755,21 @@ async function sendMessage() {
     });
 
     removeTyping();
-    addMessage('¡Gracias por tu mensaje! Lo hemos recibido y un especialista se pondrá en contacto contigo muy pronto. 🙌', 'bot');
-    setStatus('Mensaje enviado correctamente ✓', 'success');
+
+    let replyText = '¡Gracias por tu mensaje! Un especialista te contactará pronto. 🙌';
+    try {
+      const data = await response.json();
+      if (Array.isArray(data) && data[0] && data[0].output) {
+        replyText = data[0].output;
+      } else if (data && data.output) {
+        replyText = data.output;
+      } else if (data && data.message) {
+        replyText = data.message;
+      }
+    } catch (_) {}
+
+    addMessage(replyText, 'bot');
+    setStatus('');
   } catch (err) {
     removeTyping();
     addMessage('Hubo un problema al enviar. Por favor intenta de nuevo en un momento.', 'bot');
